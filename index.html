@@ -112,7 +112,21 @@
     let text = document.querySelector(".weibo-text");
     let ul = document.querySelector(".weibo-list");
 
-    let datas = []; // 定义一个数组，使用这个数组存储我们要新增的数据
+    let datas = localStorage.getItem('wbshuju'); //把旧数据取出
+    datas = JSON.parse(datas); //读取json格式字符串，转换为数组
+    datas = datas || []; //判断是否是数组
+    datas.forEach(function(e,i){ // 遍历数组
+      let li = document.createElement('li');
+      li.innerHTML = '<p class="content"></p>' +
+        e.content +
+        '<span class="del">删除</span>' +
+        '<span class="time">' +
+        e.time +
+        "</span>";
+        ul.appendChild(li);//appendChild()方法可向节点的子节点列表的末尾添加新的子节点。
+    })
+
+    // let datas = []; // 定义一个数组，使用这个数组存储我们要新增的数据
     btn.onclick = function() {
       let content = text.value; //获取文本框内容
       if (content.trim().length === 0) {
@@ -151,5 +165,11 @@
       let json = JSON.stringify(datas); //把数组里面的对象转换成json格式字符串，再存储
       localStorage.setItem("wbshuju", json); //存储到本地
     };
+    
+
+    
+    //实现删除
+    // 所有的元素都是动态生成的，有可能一开始获取不到的，需要使用委托的方式实现删除
+    
   </script>
 </html>
