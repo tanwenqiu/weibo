@@ -170,6 +170,12 @@
     
     //实现删除
     // 所有的元素都是动态生成的，有可能一开始获取不到的，需要使用委托的方式实现删除
-    
+    ul.addEventListener('click',function(e){ //给ul注册事件
+      if(e.target.classList.contains('del')){ //判断元素身上是否包含某个类名
+        ul.removeChild(e.target.parentNode); //删除对应的li
+      }
+    })
+
+    ~
   </script>
 </html>
