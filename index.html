@@ -117,12 +117,7 @@
     datas = datas || []; //判断是否是数组
     datas.forEach(function(e,i){ // 遍历数组
       let li = document.createElement('li');
-      li.innerHTML = '<p class="content"></p>' +
-        e.content +
-        '<span class="del">删除</span>' +
-        '<span class="time">' +
-        e.time +
-        "</span>";
+      li.innerHTML = '<p class="content">' + e.content + '</p><span class="del" data-id="' + e.id + '">删除</span>' +'<span class="time">' + e.time + "</span>";
         ul.appendChild(li);//appendChild()方法可向节点的子节点列表的末尾添加新的子节点。
     })
 
@@ -135,14 +130,9 @@
         return;
       }
       let time = kits.formatDate(); //生成时间
+      let id = kits.getId();
       let li = document.createElement("li"); //生成一个新的li
-      li.innerHTML =
-        '<p class="content"></p>' +
-        content +
-        '<span class="del">删除</span>' +
-        '<span class="time">' +
-        time +
-        "</span>";
+      li.innerHTML = '<p class="content">' + content + '</p><span class="del" data-id="' + id + '">删除</span>' +'<span class="time">' + time + "</span>";
       ul.insertBefore(li, ul.children[0]); //插入到ul的最前面
       text.value = ""; //清空文本框
 
@@ -158,6 +148,7 @@
         每次点击就是一个新的对象，放到数组里面，把数组存到本地存储里面即可
       */
       let obj = {
+        id: id, //获取id
         content: content,
         time: time
       };
@@ -166,16 +157,25 @@
       localStorage.setItem("wbshuju", json); //存储到本地
     };
     
-
     
     //实现删除
     // 所有的元素都是动态生成的，有可能一开始获取不到的，需要使用委托的方式实现删除
     ul.addEventListener('click',function(e){ //给ul注册事件
       if(e.target.classList.contains('del')){ //判断元素身上是否包含某个类名
         ul.removeChild(e.target.parentNode); //删除对应的li
+        //还需把本地对应的数据删除
+        let id = e.target.dataset.id;
+        datas.forEach(function(e,i){
+          if(e.id == id){
+            datas.splice(i,1);
+          }
+        })
+        //再把之前存储到本地的数据覆盖
+        let json = JSON.stringify(datas);
+        localStorage.setItem('wbshuju',json);
       }
     })
 
-    ~
+    
   </script>
 </html>
